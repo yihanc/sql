@@ -44,3 +44,12 @@ ON r2.mid=r1.mid
 JOIN reviewer v2
 ON v2.rid= r2.rid
 WHERE v1.name < v2.name
+
+
+Q8
+0.0/1.0 point (ungraded)
+Find the names of all reviewers who have contributed three or more ratings. (As an extra challenge, try writing the query without HAVING or without COUNT.) 
+
+Q9
+0.0/1.0 point (ungraded)
+Some directors directed more than one movie. For all such directors, return the titles of all movies directed by them, along with the director name. Sort by director name, then movie title. (As an extra challenge, try writing the query both with and without COUNT.) 

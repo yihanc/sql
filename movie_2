@@ -1,0 +1,10 @@
+
+
+Q3
+Return all reviewer names and movie names together in a single list, alphabetized.
+SELECT title
+FROM Movie
+UNION
+SELECT name
+FROM reviewer
+ORDER BY name, title

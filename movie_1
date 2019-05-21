@@ -102,20 +102,18 @@ Q9
 0.0/1.0 point (graded)
 Find the difference between the average rating of movies released before 1980 and the average rating of movies released after 1980. (Make sure to calculate the average rating for each movie, then the average of those averages for movies before 1980 and movies after. Don't just calculate the overall average rating before and after 1980.) 
 
-
-SELECT AVG(Before1980.avg) - AVG(After1980.avg)
+SELECT AVG(b.star)-AVG(a.star)
 FROM (
-  SELECT AVG(stars) AS avg
-  FROM Movie
-  INNER JOIN Rating USING(mId)
-  WHERE year < 1980
-  GROUP BY mId
-) AS Before1980, (
-  SELECT AVG(stars) AS avg
-  FROM Movie
-  INNER JOIN Rating USING(mId)
-  WHERE year > 1980
-  GROUP BY mId
-) AS After1980;
-ON r.rid=v.rid
-ORDER BY name, title, stars
+SELECT AVG(stars) as star
+FROM Rating r 
+JOIN movie m ON r.mid=m.mid
+WHERE year <=1980
+GROUP BY m.mid
+) as b  JOIN (
+SELECT AVG(stars) as star
+FROM Rating r 
+JOIN movie m ON r.mid=m.mid
+    WHERE year > 1980
+GROUP BY m.mid
+
+) as a

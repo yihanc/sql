@@ -60,3 +60,246 @@ UNION ALL
 SELECT l2.ID2
 FROM likes l2) 
 GROUP BY grade, name
+
+
+Course   SQL   SQL Social-Network Query Exercises   SQL Social-Network Query Exercises
+ Previous
+
+problem SQL Social-Network Query Exercises Next 
+ Bookmark this page
+Students at your hometown high school have decided to organize their social network using databases. So far, they have collected information about sixteen students in four grades, 9-12. Here's the schema: 
+
+Highschooler ( ID, name, grade ) 
+English: There is a high school student with unique ID and a given first name in a certain grade. 
+
+Friend ( ID1, ID2 ) 
+English: The student with ID1 is friends with the student with ID2. Friendship is mutual, so if (123, 456) is in the Friend table, so is (456, 123). 
+
+Likes ( ID1, ID2 ) 
+English: The student with ID1 likes the student with ID2. Liking someone is not necessarily mutual, so if (123, 456) is in the Likes table, there is no guarantee that (456, 123) is also present. 
+
+Your queries will run over a small data set conforming to the schema. View the database. (You can also download the schema and data.) 
+
+For your convenience, here is a graph showing the various connections between the students in our database. 9th graders are blue, 10th graders are green, 11th graders are yellow, and 12th graders are purple. Undirected black edges indicate friendships, and directed red edges indicate that one student likes another student.
+
+Social graph
+
+
+Instructions: Each problem asks you to write a query in SQL. To run your query against our back-end sample database using SQLite, click the "Submit" button. You will see a display of your query result and the expected result. If the results match, your query will be marked "correct". You may run as many queries as you like for each question.
+
+Important Notes:
+
+Your queries are executed using SQLite, so you must conform to the SQL constructs supported by SQLite.
+Unless a specific result ordering is asked for, you can return the result rows in any order.
+You are to translate the English into a SQL query that computes the desired result over all possible databases. All we actually check is that your query gets the right answer on the small sample database. Thus, even if your solution is marked as correct, it is possible that your query does not correctly reflect the problem at hand. (For example, if we ask for a complex condition that requires accessing all of the tables, but over our small data set in the end the condition is satisfied only by Star Wars, then the query "select title from Movie where title = 'Star Wars'" will be marked correct even though it doesn't reflect the actual question.) Circumventing the system in this fashion will get you a high score on the exercises, but it won't help you learn SQL. On the other hand, an incorrect attempt at a general solution is unlikely to produce the right answer, so you shouldn't be led astray by our checking system.
+
+You may perform these exercises as many times as you like, so we strongly encourage you to keep working with them until you complete the exercises with full credit.
+
+Q1
+1/1 point (graded)
+Find the names of all students who are friends with someone named Gabriel. 
+
+Note: Your queries are executed using SQLite, so you must conform to the SQL constructs supported by SQLite. 
+Code Editor
+1
+SELECT h2.name
+2
+FROM (SELECT  ID1 AS first, ID2 AS second
+3
+FROM friend 
+4
+UNION
+5
+SELECT ID2 AS first, ID1 As first
+6
+FROM friend) AS candidates
+7
+JOIN Highschooler h1 ON candidates.first = h1.id
+8
+JOIN Highschooler h2 ON candidates.second = h2.id
+9
+WHERE h1.name = "Gabriel"
+10
+ 
+11
+ 
+Press ESC then TAB or click outside of the code editor to exit
+correctCorrect
+
+Correct
+
+Your Query Result:
+Alexis
+Andrew
+Cassandra
+Jessica
+Jordan
+
+Expected Query Result:
+Alexis
+Andrew
+Cassandra
+Jessica
+Jordan
+Submit Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+
+ResetReset Your Answer
+Correct (1/1 point) Review
+Q2
+1/1 point (graded)
+For every student who likes someone 2 or more grades younger than themselves, return that student's name and grade, and the name and grade of the student they like. 
+
+Note: Your queries are executed using SQLite, so you must conform to the SQL constructs supported by SQLite. 
+Code Editor
+SELECT h1.name, h1.grade, h2.name, h2.grade
+FROM likes l1
+JOIN highschooler h1
+ON l1.id1=h1.id
+JOIN highschooler h2
+ON l1.id2=h2.id
+WHERE h1.grade - h2.grade >= 2
+
+1
+SELECT h1.name, h1.grade, h2.name, h2.grade
+2
+FROM likes l1
+3
+JOIN highschooler h1
+4
+ON l1.id1=h1.id
+5
+JOIN highschooler h2
+6
+ON l1.id2=h2.id
+7
+WHERE h1.grade - h2.grade >= 2
+8
+ 
+Press ESC then TAB or click outside of the code editor to exit
+correctCorrect
+
+Correct
+
+Your Query Result:
+John	12	Haley	10
+
+Expected Query Result:
+John	12	Haley	10
+Submit Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+
+ResetReset Your Answer
+Correct (1/1 point) Review
+Q3
+1/1 point (graded)
+For every pair of students who both like each other, return the name and grade of both students. Include each pair only once, with the two names in alphabetical order. 
+
+Note: Your queries are executed using SQLite, so you must conform to the SQL constructs supported by SQLite. 
+Code Editor
+1
+SELECT h1.name, h1.grade, h2.name, h2.grade
+2
+FROM (
+3
+SELECT l1.ID1 as aid, l1.ID2 AS bid
+4
+FROM likes l1
+5
+UNION ALL
+6
+SELECT l2.ID2 as aid, l2.ID1 AS bid
+7
+FROM likes l2
+8
+) AS newlike
+9
+JOIN highschooler h1
+10
+ON h1.id=newlike.aid
+11
+JOIN highschooler h2
+12
+ON h2.id = newlike.bid
+13
+WHERE h1.name < h2.name
+14
+GROUP BY aid, bid
+15
+HAVING COUNT(*) > 1
+Press ESC then TAB or click outside of the code editor to exit
+correctCorrect
+
+Correct
+
+Your Query Result:
+Cassandra	9	Gabriel	9
+Jessica	11	Kyle	12
+
+Expected Query Result:
+Cassandra	9	Gabriel	9
+Jessica	11	Kyle	12
+Submit Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+
+ResetReset Your Answer
+Correct (1/1 point) Review
+Q4
+1/1 point (graded)
+Find all students who do not appear in the Likes table (as a student who likes or is liked) and return their names and grades. Sort by grade, then by name within each grade. 
+
+Note: Your queries are executed using SQLite, so you must conform to the SQL constructs supported by SQLite. 
+Code Editor
+1
+SELECT h.name, grade
+2
+FROM highschooler h
+3
+WHERE id not in (SELECT l1.ID1
+4
+FROM likes l1
+5
+UNION ALL
+6
+SELECT l2.ID2
+7
+FROM likes l2) 
+8
+GROUP BY grade, name
+9
+ 
+10
+ 
+11
+ 
+12
+ 
+Press ESC then TAB or click outside of the code editor to exit
+correctCorrect
+
+Correct
+
+Your Query Result:
+Jordan	9
+Tiffany	9
+Logan	12
+
+Expected Query Result:
+Jordan	9
+Tiffany	9
+Logan	12
+(Order matters)
+Submit Some problems have options such as save, reset, hints, or show answer. These options follow the Submit button.
+
+ResetReset Your Answer
+Correct (1/1 point) Review
+Q5
+1/1 point (graded)
+For every situation where student A likes student B, but we have no information about whom B likes (that is, B does not appear as an ID1 in the Likes table), return A and B's names and grades. 
+
+SELECT h1.name, h1.grade, h2.name, h2.grade
+FROM likes l1
+JOIN highschooler h1
+ON l1.ID1=h1.ID
+left join likes l2
+ON l1.ID2=l2.ID1
+JOIN highschooler h2
+ON l1.ID2 = h2.ID
+WHERE l2.ID1 is NULL

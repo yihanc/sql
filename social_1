@@ -75,3 +75,24 @@ ON l1.ID2=l2.ID1
 JOIN highschooler h2
 ON l1.ID2 = h2.ID
 WHERE l2.ID1 is NULL
+
+
+
+Q6
+1/1 point (graded)
+Find names and grades of students who only have friends in the same grade. Return the result sorted by grade, then by name within each grade. 
+SELECT res.name, res.grade
+FROM highschooler res
+WHERE ID NOT IN (SELECT f.first
+FROM (
+SELECT f1.ID1 AS first, f1.ID2 AS second
+FROM friend f1
+UNION
+SELECT f2.ID2 AS first, f2.ID1 AS second
+FROM friend f2
+) f
+JOIN highschooler h1
+ON h1.ID=f.first
+JOIN highschooler h2
+ON h2.ID=f.second
+WHERE h1.grade <> h2.grade)

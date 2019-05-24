@@ -6,3 +6,16 @@ English: The student with ID1 is friends with the student with ID2. Friendship i
 
 Likes ( ID1, ID2 ) 
 English: The student with ID1 likes the student with ID2. Liking someone is not necessarily mutual, so if (123, 456) is in the Likes table, there is no guarantee that (456, 123) is also present.
+
+
+Q1
+0/1 point (ungraded)
+For every situation where student A likes student B, but student B likes a different student C, return the names and grades of A, B, and C. 
+SELECT
+  h1.name, h1.grade, h2.name, h2.grade, h3.name, h3.grade
+FROM Likes l1
+JOIN Likes l2 ON l1.id2 = l2.id1
+JOIN Highschooler h1 ON l1.id1 = h1.id
+JOIN Highschooler h2 ON l1.id2 = h2.id
+JOIN Highschooler h3 ON l2.id2 = h3.id
+WHERE l1.id1 != l2.id2

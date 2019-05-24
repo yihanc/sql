@@ -96,3 +96,24 @@ ON h1.ID=f.first
 JOIN highschooler h2
 ON h2.ID=f.second
 WHERE h1.grade <> h2.grade)
+
+Q8
+1/1 point (graded)
+Find the difference between the number of students in the school and the number of different first names. 
+SELECT COUNT(*)- COUNT(DISTINCT name)
+FROM Highschooler
+
+
+Q9
+1/1 point (graded)
+Find the name and grade of all students who are liked by more than one other student. 
+
+SELECT h.name, h.grade
+FROM highschooler h
+JOIN(
+SELECT l1.ID2 AS id
+FROM likes l1
+GROUP BY l1.ID2
+HAVING COUNT(*)>1
+) t
+ON t.id=h.id

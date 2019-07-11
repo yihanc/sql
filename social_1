@@ -6,7 +6,7 @@ SELECT h2.name
 FROM (SELECT  ID1 AS first, ID2 AS second
 FROM friend 
 UNION
-SELECT ID2 AS first, ID1 As first
+SELECT ID2 AS first, ID1 As second
 FROM friend) AS candidates
 JOIN Highschooler h1 ON candidates.first = h1.id
 JOIN Highschooler h2 ON candidates.second = h2.id
